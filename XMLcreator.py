@@ -35,13 +35,29 @@ def MatrixCreator (ga):
     global SourceToDetectorDistance
     global SourceToIsocenterDistance
     #按照要求进行矩阵运算
-    a = np.matrix([[math.cos(-InPlaneAngle),-math.sin(-InPlaneAngle),0,0],[math.sin(-InPlaneAngle),math.cos(-InPlaneAngle),0,0],[0,0,1,0],[0,0,0,1]])
-    b = np.matrix([[1,0,0,0],[0,math.cos(-OutOfPlaneAngle),-math.sin(-OutOfPlaneAngle),0],[0,math.sin(-OutOfPlaneAngle),math.cos(-OutOfPlaneAngle),0],[0,0,0,1]])
-    c = np.matrix([[math.cos(-ga),0,math.sin(-ga),0],[0,1,0,0],[-math.sin(-ga),0,math.cos(-ga),0],[0,0,0,1]])
+    a = np.matrix([[math.cos(-InPlaneAngle),-math.sin(-InPlaneAngle),0,0],
+                   [math.sin(-InPlaneAngle),math.cos(-InPlaneAngle),0,0],
+                   [0,0,1,0],
+                   [0,0,0,1]])
+    b = np.matrix([[1,0,0,0],
+                   [0,math.cos(-OutOfPlaneAngle),-math.sin(-OutOfPlaneAngle),0],
+                   [0,math.sin(-OutOfPlaneAngle),math.cos(-OutOfPlaneAngle),0],
+                   [0,0,0,1]])
+    c = np.matrix([[math.cos(-ga),0,math.sin(-ga),0],
+                   [0,1,0,0],
+                   [-math.sin(-ga),0,math.cos(-ga),0],
+                   [0,0,0,1]])
     Mr=a*b*c
-    e = np.matrix([[1,0,SourceOffsetX-ProjectionOffsetX],[0,1,SourceOffsetY-ProjectionOffsetY],[0,0,1]])
-    d = np.matrix([[-SourceToDetectorDistance,0,0,0],[0,-SourceToDetectorDistance,0,0],[0,0,1,-SourceToIsocenterDistance]])
-    f = np.matrix([[1,0,0,-SourceOffsetX],[0,1,0,-SourceOffsetY],[0,0,1,0],[0,0,0,1]])
+    e = np.matrix([[1,0,SourceOffsetX-ProjectionOffsetX],
+                   [0,1,SourceOffsetY-ProjectionOffsetY],
+                   [0,0,1]])
+    d = np.matrix([[-SourceToDetectorDistance,0,0,0],
+                   [0,-SourceToDetectorDistance,0,0],
+                   [0,0,1,-SourceToIsocenterDistance]])
+    f = np.matrix([[1,0,0,-SourceOffsetX],
+                   [0,1,0,-SourceOffsetY],
+                   [0,0,1,0],
+                   [0,0,0,1]])
     m=e*d*f*Mr
     print(m)
     #将计算得到的矩阵整形成需要格式的字符串
