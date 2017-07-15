@@ -35,18 +35,20 @@ def MatrixCreator (ga):
     global SourceToDetectorDistance
     global SourceToIsocenterDistance
     #按照要求进行矩阵运算
-    a = np.matrix([[math.cos(-InPlaneAngle),-math.sin(-InPlaneAngle),0,0],
-                   [math.sin(-InPlaneAngle),math.cos(-InPlaneAngle),0,0],
+    a = np.matrix([[math.cos(math.radians(-InPlaneAngle)),-math.sin(math.radians(-InPlaneAngle)),0,0],
+                   [math.sin(math.radians(-InPlaneAngle)),math.cos(math.radians(-InPlaneAngle)),0,0],
                    [0,0,1,0],
                    [0,0,0,1]])
     b = np.matrix([[1,0,0,0],
-                   [0,math.cos(-OutOfPlaneAngle),-math.sin(-OutOfPlaneAngle),0],
-                   [0,math.sin(-OutOfPlaneAngle),math.cos(-OutOfPlaneAngle),0],
+                   [0,math.cos(math.radians(-OutOfPlaneAngle)),-math.sin(math.radians(-OutOfPlaneAngle)),0],
+                   [0,math.sin(math.radians(-OutOfPlaneAngle)),math.cos(math.radians(-OutOfPlaneAngle)),0],
                    [0,0,0,1]])
-    c = np.matrix([[math.cos(-ga),0,math.sin(-ga),0],
+    c = np.matrix([[math.cos(math.radians(ga)),0,-(math.sin(math.radians(ga))),0],
                    [0,1,0,0],
-                   [-math.sin(-ga),0,math.cos(-ga),0],
+                   [math.sin(math.radians(ga)),0,math.cos(math.radians(ga)),0],
                    [0,0,0,1]])
+    print(c)
+    print(c)
     Mr=a*b*c
     e = np.matrix([[1,0,SourceOffsetX-ProjectionOffsetX],
                    [0,1,SourceOffsetY-ProjectionOffsetY],
@@ -59,7 +61,6 @@ def MatrixCreator (ga):
                    [0,0,1,0],
                    [0,0,0,1]])
     m=e*d*f*Mr
-    print(m)
     #将计算得到的矩阵整形成需要格式的字符串
     mm=m.tolist()
     st='\n'
@@ -90,9 +91,9 @@ def main ():
     root.setAttribute('version', '0')
     doc.appendChild(root)
     nodeSTD = doc.createElement('SourceToIsocenterDistance')
-    nodeSTD.appendChild(doc.createTextNode(str(SourceToDetectorDistance)))
+    nodeSTD.appendChild(doc.createTextNode(str(SourceToIsocenterDistance)))
     nodeTDD = doc.createElement('SourceToDetectorDistance')
-    nodeTDD.appendChild(doc.createTextNode(str(SourceToIsocenterDistance)))
+    nodeTDD.appendChild(doc.createTextNode(str(SourceToDetectorDistance)))
     root.appendChild(nodeSTD)
     root.appendChild(nodeTDD)
     for GantryAng in GantryAngs:
