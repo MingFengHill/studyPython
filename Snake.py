@@ -37,7 +37,7 @@ class Food(object):
 
 
 class Snake(object):
-    def __init__(self, grid, color = "#5FA8D9"):
+    def __init__(self, grid, color = "#000000"):
         self.grid = grid
         self.color = color
         self.body = [(8, 11), (8, 12), (8, 13)]
@@ -52,6 +52,7 @@ class Snake(object):
             self.grid.draw(pop, self.grid.bg)
         self.body = [(8, 11), (8, 12), (8, 13)]
         self.direction = "Up"
+        self.color = "#000000"
         for i in self.body:
             self.grid.draw(i, self.color)
 
@@ -83,6 +84,13 @@ class Snake(object):
             pop = self.body.pop()
             self.grid.draw(pop, self.grid.bg)
 
+     #蛇吃到了特殊食物3，改变了自身的颜色,纯属好玩
+    def change(self, new, color):
+        self.color = color
+        self.body.insert(0, new)
+        for item in self.body:
+            self.grid.draw(item, self.color)
+
 class SnakeGame(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -95,6 +103,9 @@ class SnakeGame(Frame):
         self.speed = 300
         self.grid.canvas.bind_all("<KeyRelease>", self.key_release)
         self.display_food()
+        #用于设置变色食物
+        self.color_c = ("#FFB6C1","#6A5ACD","#0000FF","#F0FFF0","#FFFFE0","#F0F8FF","#EE82EE","#000000","#5FA8D9","#32CD32")
+        self.i = 0
         #界面左侧显示分数
         self.m = StringVar()
         self.ft1 = ('Fixdsys', 40, "bold")
@@ -109,16 +120,23 @@ class SnakeGame(Frame):
         self.m.set("Score:"+str(self.score))
         self.snake.initial()
 
+    #type1:普通食物  type2:减少2  type3:大乐透，回到最初状态  type4:吃了会变色
     def display_food(self):
         self.food.color = "#23D978"
         self.food.type = 1
-        if randint(0, 30) == 5:
+        if randint(0, 40) == 5:
             self.food.color = "#FFD700"
             self.food.type = 3
             while (self.food.pos in self.snake.body):
                 self.food.set_pos()
             self.food.display()
-        elif len(self.snake.body) > 10 and randint(0, 8) == 1:
+        elif randint(0, 4) == 2:
+            self.food.color = "#EE82EE"
+            self.food.type = 4
+            while (self.food.pos in self.snake.body):
+                self.food.set_pos()
+            self.food.display()
+        elif len(self.snake.body) > 10 and randint(0, 16) == 5:
             self.food.color = "#BC8F8F"
             self.food.type = 2
             while (self.food.pos in self.snake.body):
@@ -147,10 +165,17 @@ class SnakeGame(Frame):
                 message = tkMessageBox.showinfo("Game Over", "your score: %d" % self.score)
                 if message == 'ok':
                     self.initial()
-            self.move()
+            if self.food.type == 4:
+                color = self.color_c[self.i]
+                self.i = (self.i+1)%10
+                self.food.color = color
+                self.food.display()
+                self.move(color)
+            else:
+                self.move()
         self.after(self.speed, self.run)
 
-    def move(self):
+    def move(self, color="#EE82EE"):
         # 计算蛇下一次移动的点
         head = self.snake.body[0]
         if self.snake.direction == 'Up':
@@ -176,6 +201,8 @@ class SnakeGame(Frame):
                 self.snake.add(new)
             elif self.food.type == 2:
                 self.snake.cut_down(new)
+            elif self.food.type == 4:
+                self.snake.change(new, color)
             else:
                 self.snake.init(new)
             self.display_food()
