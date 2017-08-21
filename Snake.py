@@ -1,7 +1,7 @@
 #coding=UTF-8
-from Tkinter import *
+from tkinter import *
 from random import randint
-import tkMessageBox
+import tkinter.messagebox
 
 class Grid(object):
     def __init__(self, master=None,height=16, width=24, offset=10, grid_width=50, bg="#808080"):
@@ -151,7 +151,7 @@ class SnakeGame(Frame):
         key = event.keysym
         key_dict = {"Up": "Down", "Down": "Up", "Left": "Right", "Right": "Left"}
         #蛇不可以像自己的反方向走
-        if key_dict.has_key(key) and not key == key_dict[self.snake.direction]:
+        if key_dict. __contains__(key) and not key == key_dict[self.snake.direction]:
             self.snake.direction = key
             self.move()
         elif key == 'p':
@@ -162,7 +162,7 @@ class SnakeGame(Frame):
         if not self.status[0] == 'stop':
             #判断游戏是否结束
             if self.gameover == True:
-                message = tkMessageBox.showinfo("Game Over", "your score: %d" % self.score)
+                message = tkinter.messagebox.showinfo("Game Over", "your score: %d" % self.score)
                 if message == 'ok':
                     self.initial()
             if self.food.type == 4:
