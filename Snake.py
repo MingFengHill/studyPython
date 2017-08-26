@@ -3,6 +3,16 @@ from tkinter import *
 from random import randint
 import tkinter.messagebox
 
+"""
+When you use python 2.X,you need to use the following header file.
+
+from Tkinter import *
+from random import randint
+import tkMessageBox
+
+Author:Jeremy Wang
+"""
+
 class Grid(object):
     def __init__(self, master=None,height=16, width=24, offset=10, grid_width=50, bg="#808080"):
         self.height = height
