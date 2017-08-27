@@ -60,6 +60,7 @@ class Matrix(object):
         self.generate()
         self.generate()
         self.draw()
+	self.gamewin = False
         for i in range(0, 4):
             for j in range(0, 4):
                 self.matrix_o[i][j] = self.matrix[i][j]
@@ -202,8 +203,6 @@ class Game(Frame):
         Frame.__init__(self, master)
         self.grid = Grid(master)
         self.matrix = Matrix(self.grid)
-        self.gameover = False
-        self.gamewin = False
         self.score = 0
         self.status = ['run', 'stop']
         self.grid.canvas.bind_all("<KeyRelease>", self.key_release)
